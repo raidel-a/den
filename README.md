@@ -1,84 +1,114 @@
-# Den - A Cozy home for your repos
----
+# Den - Project Progress
+A terminal-based project manager with a cozy interface.
 
-## Features:
+## Current Status
+Den is currently in active development with a functional core feature set.
 
-### Project Navigation & Management
-1. List all project in a specified directory/directories
-2. Quick search/filter projects
-3. Project categorization/tagging
-4. Recent projects view
-5. Favorite projects functionality
+### How to Run
+1. Clone the repository
+2. Make sure you have Go installed
+3. Run the application:
+   ```bash
+   go run main.go
+   ```
 
-### Project Information Display
-1. Basic prohect info:
-    - Name
-    - Path
-    - Last modified date
-    - Git status (if applicable)
-    - Language/framework icons
+For development:
+```bash
+# Using air for hot reload
+./dev.sh
+```
 
-2. Project statistics:
-    - Lines of code
-    - Number of files
-    - Size on disk
+### Currently Implemented Features
 
-3. README file display
+#### Core Functionality
+- ✅ Interactive TUI using Bubbletea
+- ✅ Project scanning and detection
+- ✅ Project list navigation
+- ✅ Fuzzy search/filtering
+- ✅ Git status integration
+- ✅ Project caching system
 
-4. Dependencies list/overview
+#### Project Actions
+- ✅ Open in editor (configurable)
+- ✅ Open in file explorer
+- ✅ Change working directory to project
+- ✅ Copy project path
 
-### Action and Operations
-1. Quick actions:
-    - open in editor ( configurable default editor )
-    - Open in terminal
-    - Copy path to clipboard
-    - Open in file explorer
+#### Configuration
+- ✅ Configurable project directories
+- ✅ Custom editor preferences
+- ✅ Theme support (5 themes available):
+  - Default
+  - Dracula
+  - Nord
+  - Gruvbox
+  - Solarized
+- ✅ Persistent configuration in `~/.config/den/config.json`
+- ✅ Project cache in `~/.cache/den/projects.json`
 
-2. Git operations:
-    - Show branch status
-    - Quick commit/push
-    - Show recent commits
-    - Pull updates
+#### UI Features
+- ✅ Vim-style navigation
+- ✅ Context menu
+- ✅ Interactive filtering
+- ✅ Tab completion for paths
+- ✅ Status messages
+- ✅ Themed interface
 
-3. Project templates
-    - create new project from template
-    - save existing project as template
+### Command Line Options
+- `--help`: Show help message
+- `--reset`: Reset configuration
+- `--debug`: Enable debug logging
 
+### Test Environment
+The project includes a comprehensive test setup script (`test-setup.sh`) that creates a realistic development environment:
 
-## UI/UX
-1. Multiple view models:
-    - List view
-    - Grid view
-    - Tree view
+#### Test Projects Created
+- Go API project with module initialization
+- Node.js web application
+- Python data analyzer with dependencies
+- Rust CLI tool with Cargo setup
+- Project with modified files (for testing git state)
+- Non-git project
 
-2. Vim-like keybindings
-3. Status bar with key hints
-4. Context menu for actions
-5. Tab completion
-6. Interactive filter/sort
+#### Features Tested
+- Git integration (clean/dirty/no-git states)
+- Multiple project types detection
+- Configuration system
+- Project scanning
+- Directory structure handling
 
-## Configuration & Customization
-1. Configurable 
-    - Project root directories
-    - Favorite editors
-    - Keybindings
-    - Color scheme
-2. Project specific notes/metadata
-3. Custom commands/scripts per project
+To set up the test environment:
+```bash
+./test-setup.sh
+```
+This will create a structured test environment in `~/projects/den-test` with various project types and states.
 
-## Integration Features
-1. Git integration
-2. Docker status/controls
-3. Package manager integration(npm, cargo, pip, etc)
-4. CI/CD status display
-5. Issue tracker integration
+### Planned Features
+- [ ] Project templates
+- [ ] Grid/Tree views
+- [ ] Project statistics
+- [ ] README preview
+- [ ] Dependency analysis
+- [ ] Project health checks
+- [ ] Bulk operations
+- [ ] Project tags/categories
+- [ ] Favorites system
+- [ ] Enhanced Git integration
 
-### Additional Features
-1. Project health checks:
-    - Outdated dependencies
-    - Security vulnerabilities
-    - TODO/FIXME count
-2. Bulk operations on multiple projects
-3. Project archiving/purging
-4. Backup/restore functionality
-5. Project documentation quick access
+## Contributing
+The project is under active development. Feel free to contribute by:
+1. Opening issues for bugs or feature requests
+2. Submitting pull requests
+3. Improving documentation
+
+## Development Setup
+1. Clone the repository
+2. Install Air for hot reload (optional):
+   ```bash
+   go install github.com/cosmtrek/air@latest
+   ```
+3. Run the development script:
+   ```bash
+   ./dev.sh
+   ```
+``` 
