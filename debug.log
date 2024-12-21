@@ -1,0 +1,224 @@
+debug 2024/12/21 11:42:11 Scanning directories: [/Users/rai/Developer/code]
+debug 2024/12/21 11:42:11 Scanning directory: /Users/rai/Developer/code
+debug 2024/12/21 11:42:11 Found 61 entries in /Users/rai/Developer/code
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/Animations.swiftpm
+debug 2024/12/21 11:42:11 Found project: Animations.swiftpm (Git: no git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/BopIT
+debug 2024/12/21 11:42:11 Found project: BopIT (Git: no git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/COP4655_HW3
+debug 2024/12/21 11:42:11 Found project: COP4655_HW3 (Git: git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/Ch2ML
+debug 2024/12/21 11:42:11 Found project: Ch2ML (Git: git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/DSA
+debug 2024/12/21 11:42:11 Found project: DSA (Git: no git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/DotMatrix
+debug 2024/12/21 11:42:11 Found project: DotMatrix (Git: git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/DrawingApp
+debug 2024/12/21 11:42:11 Found project: DrawingApp (Git: git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/ESP32bluetooth
+debug 2024/12/21 11:42:11 Found project: ESP32bluetooth (Git: no git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/ElegooRobotCarV4
+debug 2024/12/21 11:42:11 Found project: ElegooRobotCarV4 (Git: no git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/Gadget-Galaxy-R
+debug 2024/12/21 11:42:11 Found project: Gadget-Galaxy-R (Git: git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/Homework4_Shell
+debug 2024/12/21 11:42:11 Found project: Homework4_Shell (Git: git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/LoginApp
+debug 2024/12/21 11:42:11 Found project: LoginApp (Git: git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/MM...FOOD
+debug 2024/12/21 11:42:11 Found project: MM...FOOD (Git: git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/PyDiscTrakt
+debug 2024/12/21 11:42:11 Found project: PyDiscTrakt (Git: git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/SimplePresence
+debug 2024/12/21 11:42:11 Found project: SimplePresence (Git: git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/SoniDoughMobile
+debug 2024/12/21 11:42:11 Found project: SoniDoughMobile (Git: git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/TIP102
+debug 2024/12/21 11:42:11 Found project: TIP102 (Git: no git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/ThreeJS-Globe
+debug 2024/12/21 11:42:11 Found project: ThreeJS-Globe (Git: no git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/Watchy
+debug 2024/12/21 11:42:11 Found project: Watchy (Git: no git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/accordianComponent
+debug 2024/12/21 11:42:11 Found project: accordianComponent (Git: git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/animated-dash.nvim
+debug 2024/12/21 11:42:11 Found project: animated-dash.nvim (Git: no git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/arduinoFlappyBirds
+debug 2024/12/21 11:42:11 Found project: arduinoFlappyBirds (Git: git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/bouncing dvd marquee
+debug 2024/12/21 11:42:11 Found project: bouncing dvd marquee (Git: no git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/budgetBud
+debug 2024/12/21 11:42:11 Found project: budgetBud (Git: git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/budgetTracker
+debug 2024/12/21 11:42:11 Found project: budgetTracker (Git: git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/colortracking-main
+debug 2024/12/21 11:42:11 Found project: colortracking-main (Git: git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/discrakt
+debug 2024/12/21 11:42:11 Found project: discrakt (Git: git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/excallibur
+debug 2024/12/21 11:42:11 Found project: excallibur (Git: git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/flippy
+debug 2024/12/21 11:42:11 Found project: flippy (Git: git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/go_practice
+debug 2024/12/21 11:42:11 Found project: go_practice (Git: no git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/hexagon-gridripple-effect
+debug 2024/12/21 11:42:11 Found project: hexagon-gridripple-effect (Git: no git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/init-website
+debug 2024/12/21 11:42:11 Found project: init-website (Git: git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/init-website-old
+debug 2024/12/21 11:42:11 Found project: init-website-old (Git: git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/interview_practice
+debug 2024/12/21 11:42:11 Found project: interview_practice (Git: no git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/iot_garden
+debug 2024/12/21 11:42:11 Found project: iot_garden (Git: git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/marquee-bouncing-dvd
+debug 2024/12/21 11:42:11 Found project: marquee-bouncing-dvd (Git: git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/memoriah
+debug 2024/12/21 11:42:11 Found project: memoriah (Git: git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/mesh_gradient
+debug 2024/12/21 11:42:11 Found project: mesh_gradient (Git: git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/mesh_gradient.playground
+debug 2024/12/21 11:42:11 Found project: mesh_gradient.playground (Git: no git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/mimir
+debug 2024/12/21 11:42:11 Found project: mimir (Git: git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/musicBox
+debug 2024/12/21 11:42:11 Found project: musicBox (Git: no git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/p5
+debug 2024/12/21 11:42:11 Found project: p5 (Git: no git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/parallax-effect
+debug 2024/12/21 11:42:11 Found project: parallax-effect (Git: git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/playgrounds
+debug 2024/12/21 11:42:11 Found project: playgrounds (Git: no git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/portfolio-website
+debug 2024/12/21 11:42:11 Found project: portfolio-website (Git: git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/resume
+debug 2024/12/21 11:42:11 Found project: resume (Git: git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/rust
+debug 2024/12/21 11:42:11 Found project: rust (Git: no git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/smartCarColorRecognizer
+debug 2024/12/21 11:42:11 Found project: smartCarColorRecognizer (Git: git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/soniDough
+debug 2024/12/21 11:42:11 Found project: soniDough (Git: git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/swift-coreml-transformers
+debug 2024/12/21 11:42:11 Found project: swift-coreml-transformers (Git: git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/systems_programming
+debug 2024/12/21 11:42:11 Found project: systems_programming (Git: no git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/test_mmwave
+debug 2024/12/21 11:42:11 Found project: test_mmwave (Git: no git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/tic-tac-toe
+debug 2024/12/21 11:42:11 Found project: tic-tac-toe (Git: git)
+debug 2024/12/21 11:42:11 Checking potential project: /Users/rai/Developer/code/type4me
+debug 2024/12/21 11:42:11 Found project: type4me (Git: git)
+debug 2024/12/21 11:42:11 Total projects found: 54
+debug 2024/12/21 11:44:02 Scanning directories: [/Users/rai/Developer/code]
+debug 2024/12/21 11:44:02 Scanning directory: /Users/rai/Developer/code
+debug 2024/12/21 11:44:02 Found 61 entries in /Users/rai/Developer/code
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/Animations.swiftpm
+debug 2024/12/21 11:44:02 Found project: Animations.swiftpm (Git: no git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/BopIT
+debug 2024/12/21 11:44:02 Found project: BopIT (Git: no git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/COP4655_HW3
+debug 2024/12/21 11:44:02 Found project: COP4655_HW3 (Git: git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/Ch2ML
+debug 2024/12/21 11:44:02 Found project: Ch2ML (Git: git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/DSA
+debug 2024/12/21 11:44:02 Found project: DSA (Git: no git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/DotMatrix
+debug 2024/12/21 11:44:02 Found project: DotMatrix (Git: git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/DrawingApp
+debug 2024/12/21 11:44:02 Found project: DrawingApp (Git: git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/ESP32bluetooth
+debug 2024/12/21 11:44:02 Found project: ESP32bluetooth (Git: no git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/ElegooRobotCarV4
+debug 2024/12/21 11:44:02 Found project: ElegooRobotCarV4 (Git: no git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/Gadget-Galaxy-R
+debug 2024/12/21 11:44:02 Found project: Gadget-Galaxy-R (Git: git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/Homework4_Shell
+debug 2024/12/21 11:44:02 Found project: Homework4_Shell (Git: git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/LoginApp
+debug 2024/12/21 11:44:02 Found project: LoginApp (Git: git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/MM...FOOD
+debug 2024/12/21 11:44:02 Found project: MM...FOOD (Git: git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/PyDiscTrakt
+debug 2024/12/21 11:44:02 Found project: PyDiscTrakt (Git: git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/SimplePresence
+debug 2024/12/21 11:44:02 Found project: SimplePresence (Git: git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/SoniDoughMobile
+debug 2024/12/21 11:44:02 Found project: SoniDoughMobile (Git: git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/TIP102
+debug 2024/12/21 11:44:02 Found project: TIP102 (Git: no git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/ThreeJS-Globe
+debug 2024/12/21 11:44:02 Found project: ThreeJS-Globe (Git: no git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/Watchy
+debug 2024/12/21 11:44:02 Found project: Watchy (Git: no git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/accordianComponent
+debug 2024/12/21 11:44:02 Found project: accordianComponent (Git: git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/animated-dash.nvim
+debug 2024/12/21 11:44:02 Found project: animated-dash.nvim (Git: no git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/arduinoFlappyBirds
+debug 2024/12/21 11:44:02 Found project: arduinoFlappyBirds (Git: git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/bouncing dvd marquee
+debug 2024/12/21 11:44:02 Found project: bouncing dvd marquee (Git: no git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/budgetBud
+debug 2024/12/21 11:44:02 Found project: budgetBud (Git: git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/budgetTracker
+debug 2024/12/21 11:44:02 Found project: budgetTracker (Git: git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/colortracking-main
+debug 2024/12/21 11:44:02 Found project: colortracking-main (Git: git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/discrakt
+debug 2024/12/21 11:44:02 Found project: discrakt (Git: git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/excallibur
+debug 2024/12/21 11:44:02 Found project: excallibur (Git: git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/flippy
+debug 2024/12/21 11:44:02 Found project: flippy (Git: git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/go_practice
+debug 2024/12/21 11:44:02 Found project: go_practice (Git: no git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/hexagon-gridripple-effect
+debug 2024/12/21 11:44:02 Found project: hexagon-gridripple-effect (Git: no git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/init-website
+debug 2024/12/21 11:44:02 Found project: init-website (Git: git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/init-website-old
+debug 2024/12/21 11:44:02 Found project: init-website-old (Git: git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/interview_practice
+debug 2024/12/21 11:44:02 Found project: interview_practice (Git: no git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/iot_garden
+debug 2024/12/21 11:44:02 Found project: iot_garden (Git: git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/marquee-bouncing-dvd
+debug 2024/12/21 11:44:02 Found project: marquee-bouncing-dvd (Git: git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/memoriah
+debug 2024/12/21 11:44:02 Found project: memoriah (Git: git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/mesh_gradient
+debug 2024/12/21 11:44:02 Found project: mesh_gradient (Git: git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/mesh_gradient.playground
+debug 2024/12/21 11:44:02 Found project: mesh_gradient.playground (Git: no git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/mimir
+debug 2024/12/21 11:44:02 Found project: mimir (Git: git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/musicBox
+debug 2024/12/21 11:44:02 Found project: musicBox (Git: no git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/p5
+debug 2024/12/21 11:44:02 Found project: p5 (Git: no git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/parallax-effect
+debug 2024/12/21 11:44:02 Found project: parallax-effect (Git: git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/playgrounds
+debug 2024/12/21 11:44:02 Found project: playgrounds (Git: no git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/portfolio-website
+debug 2024/12/21 11:44:02 Found project: portfolio-website (Git: git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/resume
+debug 2024/12/21 11:44:02 Found project: resume (Git: git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/rust
+debug 2024/12/21 11:44:02 Found project: rust (Git: no git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/smartCarColorRecognizer
+debug 2024/12/21 11:44:02 Found project: smartCarColorRecognizer (Git: git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/soniDough
+debug 2024/12/21 11:44:02 Found project: soniDough (Git: git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/swift-coreml-transformers
+debug 2024/12/21 11:44:02 Found project: swift-coreml-transformers (Git: git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/systems_programming
+debug 2024/12/21 11:44:02 Found project: systems_programming (Git: no git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/test_mmwave
+debug 2024/12/21 11:44:02 Found project: test_mmwave (Git: no git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/tic-tac-toe
+debug 2024/12/21 11:44:02 Found project: tic-tac-toe (Git: git)
+debug 2024/12/21 11:44:02 Checking potential project: /Users/rai/Developer/code/type4me
+debug 2024/12/21 11:44:02 Found project: type4me (Git: git)
+debug 2024/12/21 11:44:02 Total projects found: 54
