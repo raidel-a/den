@@ -1,5 +1,5 @@
-# Den - Project Progress
-A terminal-based project manager with a cozy interface.
+# Den
+A terminal-based project manager with a [charming](https://github.com/charmbracelet) interface.
 
 ## Current Status
 Den is currently in active development with a functional core feature set.
@@ -111,4 +111,3 @@ The project is under active development. Feel free to contribute by:
    ```bash
    ./dev.sh
    ```
-``` 
