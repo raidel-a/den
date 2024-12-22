@@ -111,3 +111,8 @@ The project is under active development. Feel free to contribute by:
    ```bash
    ./dev.sh
    ```
+
+## Linux specific
+
+### Clipboard
+For Linux users, you'll need either xsel or xclip installed for clipboard support
