@@ -13,10 +13,12 @@ import (
 	"strings"
 	"time"
 
+	"github.com/atotto/clipboard"
+	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/charmbracelet/bubbles/key"
+	"golang.org/x/term"
 )
 
 // Application state model
@@ -32,6 +34,8 @@ type Model struct {
 	showContext   bool
 	contextCursor int
 	addingDir     bool
+	width         int
+	height        int
 }
 
 type Project struct {
@@ -101,12 +105,14 @@ var (
 		return lipgloss.NewStyle().
 			Bold(true).
 			Foreground(activeTheme.Primary).
+			Background(activeTheme.Secondary).
 			MarginBottom(1)
 	}
 
 	selectedItemStyle = func() lipgloss.Style {
 		return lipgloss.NewStyle().
 			Foreground(activeTheme.Primary).
+			Margin(0, 2).
 			Bold(true)
 	}
 
@@ -117,21 +123,15 @@ var (
 
 	contextStyle = func() lipgloss.Style {
 		return lipgloss.NewStyle().
-			Border(lipgloss.RoundedBorder()).
-			Padding(0, 1).
-			MarginTop(1).
-			MarginRight(2).
-			Background(activeTheme.Primary).
-			Foreground(activeTheme.Background)
+			Align(lipgloss.Center)
 	}
 
 	menuItemStyle = lipgloss.NewStyle().
-		Padding(0, 1)
+			Faint(true)
 
 	selectedMenuItemStyle = lipgloss.NewStyle().
-		Padding(0, 1).
-		Background(lipgloss.Color("0")).
-		Foreground(lipgloss.Color("205"))
+				Bold(true).
+				Foreground(lipgloss.Color("87"))
 )
 
 func initialModel() Model {
@@ -174,26 +174,38 @@ func initialModel() Model {
 
 	// Create custom delegate with themed colors
 	delegate := list.NewDefaultDelegate()
-	
+
 	// Style the delegate to match our theme
 	delegate.Styles.NormalTitle = lipgloss.NewStyle().
 		Foreground(activeTheme.Text)
-	
+
 	delegate.Styles.NormalDesc = lipgloss.NewStyle().
 		Foreground(activeTheme.Secondary)
-	
+
 	delegate.Styles.SelectedTitle = lipgloss.NewStyle().
 		Border(lipgloss.NormalBorder()).
 		BorderForeground(activeTheme.Primary).
 		Foreground(activeTheme.Primary).
 		Bold(true)
-	
+
 	delegate.Styles.SelectedDesc = lipgloss.NewStyle().
 		Foreground(activeTheme.Text)
-	
+
 	// Create list with themed delegate
 	projectList := list.New([]list.Item{}, delegate, 0, 0)
+
+	// Get terminal width for centering
+	w, _, _ := term.GetSize(int(os.Stdout.Fd()))
+
+	// Center and style the title
 	projectList.Title = cfg.Preferences.ProjectListTitle
+	projectList.Styles.Title = lipgloss.NewStyle().
+		Foreground(activeTheme.Primary).
+		Bold(true).
+		Padding(0, 1).
+		Width(w). // Use full terminal width
+		Align(lipgloss.Center)
+
 	projectList.SetShowHelp(true)
 
 	// Add custom help
@@ -205,12 +217,6 @@ func initialModel() Model {
 			),
 		}
 	}
-
-	// Style the list title
-	projectList.Styles.Title = lipgloss.NewStyle().
-		Foreground(activeTheme.Primary).
-		Bold(true).
-		Padding(0, 1)
 
 	// Style the filter prompt
 	projectList.Styles.FilterPrompt = lipgloss.NewStyle().
@@ -261,8 +267,18 @@ func (m Model) Init() tea.Cmd {
 func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
-		h, v := lipgloss.NewStyle().Margin(1, 2).GetFrameSize()
-		m.list.SetSize(msg.Width-h, msg.Height-v)
+		m.width = msg.Width
+		m.height = msg.Height
+
+		// Update list dimensions
+		m.list.SetSize(msg.Width, msg.Height)
+
+		// Recenter title with new width
+		m.list.Styles.Title = m.list.Styles.Title.Copy().
+			Width(msg.Width).
+			Align(lipgloss.Center)
+
+		return m, nil
 
 	case projectsLoadedMsg:
 		items := make([]list.Item, len(msg))
@@ -282,7 +298,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					if len(suggestions) > 0 {
 						m.tabState = &tabCompletionState{
 							suggestions: suggestions,
-							index:      0,
+							index:       0,
 						}
 						m.input = m.tabState.suggestions[0]
 					}
@@ -465,8 +481,12 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 						return m, tea.Quit
 
 					case 3: // Copy Path
-						// TODO: Implement clipboard functionality
-						m.status = "Path copied to clipboard"
+						if err := copyToClipboard(i.project.Path); err != nil {
+							m.status = fmt.Sprintf("Error copying to clipboard: %v", err)
+						} else {
+							m.status = "Path copied to clipboard"
+						}
+						m.showContext = false
 					}
 				}
 				m.showContext = false
@@ -505,7 +525,7 @@ func (m Model) View() string {
 		s.WriteString("\n\n")
 		s.WriteString(instructionStyle().Render(
 			"Enter the path to your projects directory.\n" +
-			"This is typically something like ~/Developer or ~/Projects\n",
+				"This is typically something like ~/Developer or ~/Projects\n",
 		))
 		s.WriteString("\n" + inputStyle().Render(m.input))
 
@@ -560,7 +580,7 @@ func (m Model) View() string {
 			width += itemWidth
 		}
 
-		menu := contextStyle().Render(strings.Join(menuItems, "│"))
+		menu := contextStyle().Render(strings.Join(menuItems, "•"))
 		s.WriteString("\n" + menu)
 
 		return s.String()
@@ -632,7 +652,6 @@ func main() {
 		os.Exit(1)
 	}
 }
-
 func getPathSuggestions(partial string) []string {
 	if partial == "" {
 		partial = "."
@@ -907,4 +926,8 @@ func convertProjectsToCache(projects []Project) []cache.Project {
 		}
 	}
 	return cached
+}
+
+func copyToClipboard(text string) error {
+	return clipboard.WriteAll(text)
 }
