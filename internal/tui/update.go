@@ -8,8 +8,9 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	tea "github.com/charmbracelet/bubbletea"
+
 	"github.com/charmbracelet/bubbles/list"
+	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
 
@@ -20,6 +21,9 @@ func (m Model) Init() tea.Cmd {
 
 // Update handles all state updates
 func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	var cmd tea.Cmd
+	m.List, cmd = m.List.Update(msg)
+
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
 		m.Width = msg.Width
@@ -33,7 +37,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			Width(msg.Width).
 			Align(lipgloss.Center)
 
-		return m, nil
+		return m, cmd
 
 	case ProjectsLoadedMsg:
 		items := make([]list.Item, len(msg))
@@ -41,9 +45,14 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			items[i] = ListItem{Project: p}
 		}
 		m.List.SetItems(items)
-		return m, nil
+		return m, cmd
 
 	case tea.KeyMsg:
+		// If we're filtering, let the list handle everything
+		if m.List.FilterState() == list.Filtering {
+			return m, cmd
+		}
+
 		// Handle directory addition mode
 		if m.AddingDir {
 			return m.handleAddingDirUpdate(msg)
@@ -74,15 +83,11 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m.handleContextMenuUpdate(msg)
 		}
 
-		// Handle list updates when not in input mode and context menu is not shown
-		if !m.InputMode && !m.ShowContext {
-			var cmd tea.Cmd
-			m.List, cmd = m.List.Update(msg)
-			return m, cmd
-		}
+		// Return the list update command
+		return m, cmd
 	}
 
-	return m, nil
+	return m, cmd
 }
 
 func (m Model) handleAddingDirUpdate(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
@@ -93,7 +98,7 @@ func (m Model) handleAddingDirUpdate(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 			if len(suggestions) > 0 {
 				m.TabState = &TabCompletionState{
 					Suggestions: suggestions,
-					Index:      0,
+					Index:       0,
 				}
 				m.Input = m.TabState.Suggestions[0]
 			}
@@ -115,8 +120,8 @@ func (m Model) handleAddingDirUpdate(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	default:
 		if !m.ShowContext {
 			m.Input += msg.String()
+			m.TabState = nil
 		}
-		m.TabState = nil
 		return m, nil
 	}
 }
@@ -129,7 +134,7 @@ func (m Model) handleInputModeUpdate(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 			if len(suggestions) > 0 {
 				m.TabState = &TabCompletionState{
 					Suggestions: suggestions,
-					Index:      0,
+					Index:       0,
 				}
 				m.Input = m.TabState.Suggestions[0]
 			}
