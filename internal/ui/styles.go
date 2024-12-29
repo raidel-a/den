@@ -36,7 +36,7 @@ func NewStyles(activeTheme theme.Theme) *Styles {
 			Bold(true).
 			Foreground(activeTheme.Primary).
 			Background(activeTheme.Secondary).
-			MarginBottom(1),
+			Padding(3, 3),
 
 		SelectedItem: lipgloss.NewStyle().
 			Foreground(activeTheme.Primary).
@@ -47,7 +47,7 @@ func NewStyles(activeTheme theme.Theme) *Styles {
 			Foreground(activeTheme.Secondary),
 
 		Context: lipgloss.NewStyle().
-			Align(lipgloss.Center),
+			MarginTop(1),
 
 		MenuItem: lipgloss.NewStyle().
 			Faint(true),
