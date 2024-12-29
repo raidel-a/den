@@ -4,6 +4,9 @@ import (
 	"den/internal/config"
 	"den/internal/project"
 	"den/internal/ui"
+
+	"fmt"
+
 	"github.com/atotto/clipboard"
 	"github.com/charmbracelet/bubbles/list"
 )
@@ -37,7 +40,7 @@ type ListItem struct {
 	Project project.Project
 }
 
-func (i ListItem) Title() string       { return i.Project.Name }
+func (i ListItem) Title() string { return i.Project.Name }
 func (i ListItem) Description() string {
 	desc := i.Project.Path
 	if i.Project.GitState != "" {
@@ -45,8 +48,11 @@ func (i ListItem) Description() string {
 	}
 	return desc
 }
+
+// FilterValue implements list.Item interface
 func (i ListItem) FilterValue() string {
-	return i.Project.Name + " " + i.Project.Path
+	// Return both name and path for filtering
+	return fmt.Sprintf("%s %s", i.Project.Name, i.Project.Path)
 }
 
 // ContextOptions defines the available context menu options
