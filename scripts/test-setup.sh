@@ -7,10 +7,21 @@ NC='\033[0m' # No Color
 
 echo -e "${BLUE}Setting up Den test environment...${NC}"
 
+# Test CLI features
+echo -e "${GREEN}Testing CLI features...${NC}"
+echo "Testing help command..."
+./den --help
+
+echo "Testing version command..."
+./den --version
+
 # Clear existing config and cache
 echo -e "${GREEN}Cleaning up existing configuration...${NC}"
-rm -rf ~/.config/den
-rm -rf ~/.cache/den
+./den --reset
+
+# Test shell completion and man page installation
+echo -e "${GREEN}Installing shell completions and man pages...${NC}"
+./den --install
 
 # Create test projects structure with various types of projects
 TEST_ROOT=~/projects/den-test
@@ -119,7 +130,7 @@ echo "# Project without Git" > "${TEST_ROOT}/misc/no-git-project/README.md"
 # Create initial Den configuration
 echo -e "${GREEN}Creating initial Den configuration...${NC}"
 mkdir -p ~/.config/den
-cat > ~/.config/den/config.json << EOL
+cat > ~/.config/den/config.yaml << EOL
 {
     "projectDirs": ["${TEST_ROOT}"],
     "preferences": {
@@ -133,6 +144,12 @@ cat > ~/.config/den/config.json << EOL
 }
 EOL
 
+# Test debug mode
+echo -e "${GREEN}Testing debug mode...${NC}"
+./den --debug &
+sleep 2
+kill $!
+
 echo -e "${BLUE}Test environment setup complete!${NC}"
 echo -e "${GREEN}Created test projects:${NC}"
 echo "  - Go API (clean git)"
@@ -142,5 +159,23 @@ echo "  - Rust CLI Tool (clean git)"
 echo "  - Modified Project (dirty git)"
 echo "  - No Git Project"
 echo
+echo -e "${GREEN}CLI features tested:${NC}"
+echo "  - Help command"
+echo "  - Version information"
+echo "  - Configuration reset"
+echo "  - Shell completions"
+echo "  - Man page installation"
+echo "  - Debug mode"
+echo
 echo -e "${BLUE}You can now run Den to explore these test projects.${NC}"
-echo "Run: go run main.go"
+echo "Run: den"
+
+# Test man page
+if command -v man &> /dev/null; then
+    echo -e "${GREEN}Testing man page...${NC}"
+    man den
+fi
+
+# Test shell completions
+echo -e "${GREEN}Testing shell completions...${NC}"
+echo "Type 'den --' and press Tab to test completions"

@@ -4,12 +4,13 @@ A terminal-based project manager with a [charming](https://github.com/charmbrace
 ## Current Status
 Den is currently in active development with a functional core feature set.
 
-### How to Run
+### Installation
 1. Clone the repository
 2. Make sure you have Go installed
-3. Run the application:
+3. Build and install:
    ```bash
-   go run main.go
+   go build
+   ./den --install   # Install shell completions and man pages
    ```
 
 For development:
@@ -27,6 +28,8 @@ For development:
 - ✅ Fuzzy search/filtering
 - ✅ Git status integration
 - ✅ Project caching system
+- ✅ Shell completions (Bash, Zsh, Fish)
+- ✅ Man page documentation
 
 #### Project Actions
 - ✅ Open in editor (configurable)
@@ -43,7 +46,7 @@ For development:
   - Nord
   - Gruvbox
   - Solarized
-- ✅ Persistent configuration in `~/.config/den/config.json`
+- ✅ Persistent configuration in `~/.config/den/config.yaml`
 - ✅ Project cache in `~/.cache/den/projects.json`
 
 #### UI Features
@@ -54,10 +57,34 @@ For development:
 - ✅ Status messages
 - ✅ Themed interface
 
-### Command Line Options
-- `--help`: Show help message
-- `--reset`: Reset configuration
-- `--debug`: Enable debug logging
+### Command Line Interface
+```
+den [flags]
+
+Flags:
+    -h, --help      Show help information
+    -v, --version   Display version information
+    --reset         Reset all configuration and start fresh
+    --debug         Enable debug logging
+    --install       Install shell completions and man pages
+```
+
+#### Shell Completion
+Den provides shell completion support for:
+- Bash: Installed to `~/.bash_completion.d/den`
+- Zsh: Installed to `~/.zsh/completion/_den`
+- Fish: Installed to `~/.config/fish/completions/den.fish`
+
+To install completions and man pages:
+```bash
+den --install
+```
+
+#### Man Page
+After installation, view the man page with:
+```bash
+man den
+```
 
 ### Test Environment
 The project includes a comprehensive test setup script (`test-setup.sh`) that creates a realistic development environment:
@@ -76,6 +103,8 @@ The project includes a comprehensive test setup script (`test-setup.sh`) that cr
 - Configuration system
 - Project scanning
 - Directory structure handling
+- Shell completion functionality
+- Man page installation
 
 To set up the test environment:
 ```bash
@@ -115,4 +144,11 @@ The project is under active development. Feel free to contribute by:
 ## Linux specific
 
 ### Clipboard
-For Linux users, you'll need either xsel or xclip installed for clipboard support
+For Linux users, you'll need either xsel or xclip installed for clipboard support:
+```bash
+# Debian/Ubuntu
+sudo apt-get install xsel
+
+# or
+sudo apt-get install xclip
+```
