@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -22,7 +23,6 @@ func (m Model) Init() tea.Cmd {
 // Update handles all state updates
 func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmd tea.Cmd
-	m.List, cmd = m.List.Update(msg)
 
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
@@ -48,9 +48,21 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return m, cmd
 
 	case tea.KeyMsg:
-		// If we're filtering, let the list handle everything
-		if m.List.FilterState() == list.Filtering {
-			return m, cmd
+		// First check if the list wants to handle this key message
+		if !m.ShowContext && !m.AddingDir && !m.InputMode {
+			// Always let the list handle filtering keys
+			if m.List.FilterState() == list.Filtering {
+				var cmd tea.Cmd
+				m.List, cmd = m.List.Update(msg)
+				return m, cmd
+			}
+
+			// Check for filter trigger
+			if key.Matches(msg, m.List.KeyMap.Filter) {
+				var cmd tea.Cmd
+				m.List, cmd = m.List.Update(msg)
+				return m, cmd
+			}
 		}
 
 		// Handle directory addition mode
@@ -58,36 +70,57 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m.handleAddingDirUpdate(msg)
 		}
 
-		// Handle normal mode
-		switch msg.String() {
-		case "a":
+		// Handle context menu if it's shown
+		if m.ShowContext {
+			return m.handleContextMenuUpdate(msg)
+		}
+
+		// Handle input mode
+		if m.InputMode {
+			return m.handleInputModeUpdate(msg)
+		}
+
+		// Handle normal mode key presses
+		switch {
+		case key.Matches(msg, m.KeyMap.AddDirectory):
 			if !m.ShowContext && !m.InputMode {
 				m.AddingDir = true
 				m.Input = ""
 				m.Err = nil
 				return m, nil
 			}
-		case "enter", " ":
-			if !m.ShowContext && !m.InputMode {
+		case key.Matches(msg, m.KeyMap.ShowContext):
+			if !m.ShowContext && !m.InputMode && m.List.FilterState() != list.Filtering {
 				m.ShowContext = true
 				m.ContextCursor = 0
 				return m, nil
 			}
+		case key.Matches(msg, m.KeyMap.OpenConfig):
+			if !m.ShowContext && !m.InputMode && !m.AddingDir {
+				configPath, err := config.GetConfigPath()
+				if err != nil {
+					m.Status = fmt.Sprintf("Error getting config path: %v", err)
+					return m, nil
+				}
+				if err := editor.OpenInEditor(configPath, m.Config); err != nil {
+					m.Status = fmt.Sprintf("Error opening config: %v", err)
+					return m, nil
+				}
+				return m, tea.Quit
+			}
 		}
 
-		if m.InputMode {
-			return m.handleInputModeUpdate(msg)
-		}
+		// Let the list handle all other keys
+		var cmd tea.Cmd
+		m.List, cmd = m.List.Update(msg)
+		return m, cmd
 
-		if m.ShowContext {
-			return m.handleContextMenuUpdate(msg)
-		}
-
-		// Return the list update command
+	default:
+		// Make sure to pass all other messages to the list
+		var cmd tea.Cmd
+		m.List, cmd = m.List.Update(msg)
 		return m, cmd
 	}
-
-	return m, cmd
 }
 
 func (m Model) handleAddingDirUpdate(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
@@ -117,9 +150,17 @@ func (m Model) handleAddingDirUpdate(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 		m.Err = nil
 		return m, nil
 
+	case tea.KeyBackspace, tea.KeyDelete:
+		m.TabState = nil
+		if len(m.Input) > 0 {
+			m.Input = m.Input[:len(m.Input)-1]
+		}
+		m.Err = nil
+		return m, nil
+
 	default:
-		if !m.ShowContext {
-			m.Input += msg.String()
+		if !m.ShowContext && msg.Type == tea.KeyRunes {
+			m.Input += string(msg.Runes)
 			m.TabState = nil
 		}
 		return m, nil
@@ -173,19 +214,19 @@ func (m Model) handleInputModeUpdate(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 }
 
 func (m Model) handleContextMenuUpdate(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
-	switch msg.String() {
-	case "up", "k":
+	switch {
+	case key.Matches(msg, m.KeyMap.Up):
 		m.ContextCursor--
 		if m.ContextCursor < 0 {
 			m.ContextCursor = len(ContextOptions) - 1
 		}
 		return m, nil
-	case "down", "j":
+	case key.Matches(msg, m.KeyMap.Down):
 		m.ContextCursor = (m.ContextCursor + 1) % len(ContextOptions)
 		return m, nil
-	case "enter", " ":
+	case key.Matches(msg, m.KeyMap.Enter):
 		return m.handleContextMenuSelection()
-	case "esc":
+	case key.Matches(msg, m.KeyMap.Escape):
 		m.ShowContext = false
 		return m, nil
 	}

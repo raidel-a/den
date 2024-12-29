@@ -8,8 +8,59 @@ import (
 	"fmt"
 
 	"github.com/atotto/clipboard"
+	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/list"
 )
+
+// KeyMap defines keybindings for the application
+type KeyMap struct {
+	AddDirectory key.Binding
+	ShowContext  key.Binding
+	Up           key.Binding
+	Down         key.Binding
+	Enter        key.Binding
+	Escape       key.Binding
+	Filter       key.Binding
+	OpenConfig   key.Binding
+}
+
+// DefaultKeyMap returns the default keybindings
+func DefaultKeyMap() KeyMap {
+	return KeyMap{
+		AddDirectory: key.NewBinding(
+			key.WithKeys("a"),
+			key.WithHelp("a", "add directory"),
+		),
+		ShowContext: key.NewBinding(
+			key.WithKeys("enter", " "),
+			key.WithHelp("enter", "show context menu"),
+		),
+		Up: key.NewBinding(
+			key.WithKeys("up", "k"),
+			key.WithHelp("↑/k", "up"),
+		),
+		Down: key.NewBinding(
+			key.WithKeys("down", "j"),
+			key.WithHelp("↓/j", "down"),
+		),
+		Enter: key.NewBinding(
+			key.WithKeys("enter"),
+			key.WithHelp("enter", "confirm"),
+		),
+		Escape: key.NewBinding(
+			key.WithKeys("esc"),
+			key.WithHelp("esc", "cancel"),
+		),
+		Filter: key.NewBinding(
+			key.WithKeys("/"),
+			key.WithHelp("/", "filter"),
+		),
+		OpenConfig: key.NewBinding(
+			key.WithKeys("."),
+			key.WithHelp(".", "open config"),
+		),
+	}
+}
 
 // Model represents the application state
 type Model struct {
@@ -27,6 +78,7 @@ type Model struct {
 	Width         int
 	Height        int
 	Styles        *ui.Styles
+	KeyMap        KeyMap
 }
 
 // TabCompletionState tracks the state of tab completion

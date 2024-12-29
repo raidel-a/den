@@ -67,14 +67,14 @@ func initialModel() tui.Model {
 	} else {
 		// Scan directories and update cache
 		projects = project.ScanForProjects(cfg.ProjectDirs, cfg)
-		
+
 		// Update cache
 		projectCache = &cache.ProjectCache{
 			Projects:     project.ConvertProjectsToCache(projects),
 			LastUpdated:  time.Now(),
 			DirectoryMap: make(map[string]int),
 		}
-		
+
 		// Update directory map
 		for _, p := range projects {
 			dir := filepath.Dir(p.Path)
@@ -93,6 +93,7 @@ func initialModel() tui.Model {
 	projectList := list.New([]list.Item{}, delegate, 0, 0)
 	projectList.Title = cfg.Preferences.ProjectListTitle
 	projectList.SetShowHelp(true)
+	projectList.SetFilteringEnabled(true)
 
 	// Add custom help
 	projectList.AdditionalFullHelpKeys = func() []key.Binding {
@@ -113,6 +114,7 @@ func initialModel() tui.Model {
 	return tui.Model{
 		Config:        cfg,
 		List:          projectList,
+		Projects:      projects,
 		TabState:      nil,
 		ShowContext:   false,
 		ContextCursor: 0,
