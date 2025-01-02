@@ -12,7 +12,6 @@ import (
 	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/charmbracelet/lipgloss"
 )
 
 // Init initializes the model
@@ -32,10 +31,13 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		// Update list dimensions
 		m.List.SetSize(msg.Width, msg.Height)
 
-		// Recenter title with new width
-		m.List.Styles.Title = m.List.Styles.Title.Copy().
-			Width(msg.Width).
-			Align(lipgloss.Center)
+		// Update instruction width based on window size
+		m.Styles.Instruction = m.Styles.Instruction.Copy().
+			Width(msg.Width - 4) // Subtract some padding
+
+		// Update title width based on window size
+		m.Styles.Title = m.Styles.Title.Copy().
+			Width(msg.Width - 4)
 
 		return m, cmd
 
@@ -292,9 +294,21 @@ func (m Model) handleNewDirectoryConfirmation() (tea.Model, tea.Cmd) {
 		return m, nil
 	}
 
-	// Reset state and rescan projects
+	// Reset state and prepare for project scanning
 	m.AddingDir = false
+	m.InputMode = false
 	m.Input = ""
+
+	// Reinitialize list key bindings
+	m.List.KeyMap.Filter.SetEnabled(true)
+	m.List.KeyMap.ShowFullHelp.SetEnabled(true)
+	m.List.KeyMap.CancelWhileFiltering.SetEnabled(true)
+	m.List.KeyMap.AcceptWhileFiltering.SetEnabled(true)
+	m.List.SetFilteringEnabled(true)
+	m.List.SetShowFilter(true)
+	m.List.SetShowHelp(true)
+
+	// Return command to scan for projects
 	return m, func() tea.Msg {
 		return ProjectsLoadedMsg(project.ScanForProjects(m.Config.ProjectDirs, m.Config))
 	}

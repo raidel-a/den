@@ -3,6 +3,7 @@ package tui
 import (
 	"fmt"
 	"strings"
+
 	"github.com/charmbracelet/lipgloss"
 )
 
@@ -22,12 +23,19 @@ func (m Model) View() string {
 func (m Model) renderAddingDirView() string {
 	var s strings.Builder
 	s.WriteString(m.Styles.Title.Render("Add Project Directory"))
-	s.WriteString("\n\n")
+	s.WriteString("\n")
 	s.WriteString(m.Styles.Instruction.Render(
 		"Enter the path to your projects directory.\n" +
-			"This is typically something like ~/Developer or ~/Projects\n",
+			"Press Tab to autocomplete, Esc to cancel and Enter to confirm.",
 	))
-	s.WriteString("\n" + m.Styles.Input.Render(m.Input))
+	s.WriteString("\n")
+
+	// Show either input or placeholder
+	if m.Input == "" {
+		s.WriteString(m.Styles.Placeholder.Render("Enter directory path..."))
+	} else {
+		s.WriteString(m.Styles.Input.Render(m.Input))
+	}
 
 	if m.TabState != nil && len(m.TabState.Suggestions) > 0 {
 		s.WriteString("\n\nSuggestions:\n")

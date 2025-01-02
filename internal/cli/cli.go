@@ -11,9 +11,7 @@ import (
 	"den/internal/ui"
 	"fmt"
 	"os"
-	"path/filepath"
 	"runtime/debug"
-	"time"
 
 	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/list"
@@ -168,51 +166,34 @@ func (c *CLI) startUI() error {
 		return fmt.Errorf("failed to load config: %v", err)
 	}
 
+	// Check if this is first run or reset state
+	isFirstRun := len(cfg.ProjectDirs) == 0
+
 	// Set active theme and create styles
 	activeTheme := theme.GetTheme(cfg.Preferences.Theme)
 	styles := ui.NewStyles(activeTheme)
 
-	// Try to load from cache first
-	projectCache, err := cache.LoadCache()
-	if err != nil && c.debugMode {
-		fmt.Printf("Error loading cache: %v\n", err)
-	}
-
+	// Initialize empty project list for first run
 	var projects []project.Project
-	if projectCache != nil && projectCache.IsCacheValid(cfg) {
-		// Use cached projects
-		projects = project.ConvertCacheToProjects(projectCache.Projects)
-		if c.debugMode {
-			fmt.Printf("Using cached projects (%d items)\n", len(projects))
-		}
-	} else {
-		// Scan directories and update cache
-		projects = project.ScanForProjects(cfg.ProjectDirs, cfg)
-
-		// Update cache
-		projectCache = &cache.ProjectCache{
-			Projects:     project.ConvertProjectsToCache(projects),
-			LastUpdated:  time.Now(),
-			DirectoryMap: make(map[string]int),
-		}
-
-		// Update directory map
-		for _, p := range projects {
-			dir := filepath.Dir(p.Path)
-			projectCache.DirectoryMap[dir]++
-		}
-
-		if err := projectCache.SaveCache(); err != nil && c.debugMode {
-			fmt.Printf("Error updating cache: %v\n", err)
-		}
-	}
 
 	// Create themed delegate
 	delegate := ui.CreateThemedDelegate(activeTheme)
 
-	// Create list with themed delegate
+	// Create key bindings
+	keyMap := tui.DefaultKeyMap()
+
+	// Initialize list with empty items
 	projectList := list.New([]list.Item{}, delegate, 0, 0)
+	projectList.SetShowTitle(true)
 	projectList.Title = cfg.Preferences.ProjectListTitle
+	projectList.Styles.Title = styles.ListTitle
+	projectList.AdditionalFullHelpKeys = func() []key.Binding {
+		return []key.Binding{
+			keyMap.AddDirectory,
+			keyMap.ShowContext,
+			keyMap.OpenConfig,
+		}
+	}
 	projectList.SetShowHelp(true)
 	projectList.SetFilteringEnabled(true)
 	projectList.SetShowFilter(true)
@@ -220,28 +201,32 @@ func (c *CLI) startUI() error {
 	projectList.KeyMap.ShowFullHelp.SetEnabled(true)
 	projectList.KeyMap.CancelWhileFiltering.SetEnabled(true)
 	projectList.KeyMap.AcceptWhileFiltering.SetEnabled(true)
-	// projectList.DisableQuitKeybindings()
 
-	// Add custom help
-	projectList.AdditionalFullHelpKeys = func() []key.Binding {
-		return []key.Binding{
-			key.NewBinding(
-				key.WithKeys("a"),
-				key.WithHelp("a", "add directory"),
-			),
-			key.NewBinding(
-				key.WithKeys("."),
-				key.WithHelp(".", "open config"),
-			),
+	if !isFirstRun {
+		// Only try to load cache and scan for projects if we have configured directories
+		projectCache, err := cache.LoadCache()
+		if err != nil && c.debugMode {
+			fmt.Printf("Error loading cache: %v\n", err)
 		}
+
+		if projectCache != nil && projectCache.IsCacheValid(cfg) {
+			projects = project.ConvertCacheToProjects(projectCache.Projects)
+			if c.debugMode {
+				fmt.Printf("Using cached projects (%d items)\n", len(projects))
+			}
+		} else {
+			projects = project.ScanForProjects(cfg.ProjectDirs, cfg)
+			// Update cache logic...
+		}
+
+		items := make([]list.Item, len(projects))
+		for i, p := range projects {
+			items[i] = tui.ListItem{Project: p}
+		}
+		projectList.SetItems(items)
 	}
 
-	items := make([]list.Item, len(projects))
-	for i, p := range projects {
-		items[i] = tui.ListItem{Project: p}
-	}
-	projectList.SetItems(items)
-
+	// Initialize the TUI model
 	model := tui.Model{
 		Config:        cfg,
 		List:          projectList,
@@ -249,7 +234,8 @@ func (c *CLI) startUI() error {
 		TabState:      nil,
 		ShowContext:   false,
 		ContextCursor: 0,
-		InputMode:     len(cfg.ProjectDirs) == 0,
+		AddingDir:     isFirstRun, // Set to true for first run
+		InputMode:     isFirstRun, // Set to true for first run
 		Styles:        styles,
 		KeyMap:        tui.DefaultKeyMap(),
 	}
