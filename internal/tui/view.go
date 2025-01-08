@@ -17,45 +17,75 @@ func (m Model) View() string {
 		return m.renderContextView()
 	}
 
-	return m.List.View()
+	view := m.List.View()
+
+	// Add status indicator for favorite filtering
+	if m.ShowFavoritesOnly {
+		statusMsg := m.Styles.RegularItem.Copy().
+			Background(m.Styles.FavoriteIcon.GetForeground()).
+			Foreground(lipgloss.Color("0")).
+			Padding(0, 1).
+			Render("Showing Favorites Only")
+
+		// Add status message at the bottom
+		view = lipgloss.JoinVertical(lipgloss.Left,
+			view,
+			"\n"+statusMsg,
+		)
+	}
+
+	return view
 }
 
 func (m Model) renderAddingDirView() string {
 	var s strings.Builder
-	s.WriteString(m.Styles.Title.Render("Add Project Directory"))
-	s.WriteString("\n")
+	s.WriteString(m.Styles.Title.Render("Add Project Directory\n"))
 	s.WriteString(m.Styles.Instruction.Render(
 		"Enter the path to your projects directory.\n" +
-			"Press Tab to autocomplete, Esc to cancel and Enter to confirm.",
+			"Press Tab to autocomplete, Esc to cancel, Enter to confirm.",
 	))
-	s.WriteString("\n")
 
-	// Show either input or placeholder
-	if m.Input == "" {
-		s.WriteString(m.Styles.Placeholder.Render("Enter directory path..."))
-	} else {
-		s.WriteString(m.Styles.Input.Render(m.Input))
+	// Show placeholder text in a dimmed style if input is empty
+	inputText := m.Input
+	if inputText == "" {
+		inputText = m.Styles.Placeholder.Render(InputPlaceholder)
 	}
+	s.WriteString(m.Styles.Input.Render(inputText))
 
 	if m.TabState != nil && len(m.TabState.Suggestions) > 0 {
-		s.WriteString("\n\nSuggestions:\n")
-		for i, sugg := range m.TabState.Suggestions {
+		s.WriteString("\nSuggestions:")
+
+		// Calculate pagination
+		start := m.TabState.Page * m.TabState.PageSize
+		end := start + m.TabState.PageSize
+		if end > len(m.TabState.Suggestions) {
+			end = len(m.TabState.Suggestions)
+		}
+
+		// Show page info if there are multiple pages
+		totalPages := (len(m.TabState.Suggestions) + m.TabState.PageSize - 1) / m.TabState.PageSize
+		if totalPages > 1 {
+			s.WriteString(fmt.Sprintf(" (Page %d/%d)", m.TabState.Page+1, totalPages))
+		}
+
+		// Show suggestions for current page
+		for i := start; i < end; i++ {
 			if i == m.TabState.Index {
-				s.WriteString(m.Styles.SelectedItem.Render("> " + sugg + "\n"))
+				s.WriteString("\n" + m.Styles.SelectedItem.Render("> "+m.TabState.Suggestions[i]))
 			} else {
-				s.WriteString(m.Styles.RegularItem.Render("  " + sugg + "\n"))
+				s.WriteString("\n" + m.Styles.RegularItem.Render("  "+m.TabState.Suggestions[i]))
 			}
 		}
 	}
 
 	if m.Err != nil {
-		s.WriteString("\n\n" + lipgloss.NewStyle().
+		s.WriteString("\n" + lipgloss.NewStyle().
 			Foreground(lipgloss.Color("9")).
 			Render(fmt.Sprintf("Error: %v", m.Err)))
 	}
 
 	s.WriteString("\n\n" + m.Styles.RegularItem.Render(
-		"Tab: autocomplete • Enter: confirm • Esc: cancel",
+		"Enter: confirm • Tab: complete • ↑/↓: navigate • ←/→: more • Esc: cancel",
 	))
 
 	return s.String()

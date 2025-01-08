@@ -16,6 +16,7 @@ type Project struct {
 	Path     string
 	LastMod  string
 	GitState string
+	Favorite bool
 }
 
 // DetectProject attempts to identify a project at the given path
@@ -39,11 +40,21 @@ func DetectProject(path string, config *config.Config) (*Project, error) {
 		}
 	}
 
+	// Check if project is in favorites
+	favorite := false
+	for _, favPath := range config.Favorites {
+		if favPath == path {
+			favorite = true
+			break
+		}
+	}
+
 	return &Project{
 		Name:     name,
 		Path:     path,
 		LastMod:  lastMod,
 		GitState: gitState,
+		Favorite: favorite,
 	}, nil
 }
 
@@ -87,12 +98,12 @@ func HasProjectFile(path string) bool {
 	projectFiles := []string{
 		"package.json",     // Node.js
 		"Cargo.toml",       // Rust
-		"go.mod",          // Go
+		"go.mod",           // Go
 		"requirements.txt", // Python
-		"pom.xml",         // Java/Maven
-		"build.gradle",    // Java/Gradle
-		"Gemfile",         // Ruby
-		"composer.json",   // PHP
+		"pom.xml",          // Java/Maven
+		"build.gradle",     // Java/Gradle
+		"Gemfile",          // Ruby
+		"composer.json",    // PHP
 	}
 
 	for _, file := range projectFiles {
@@ -125,6 +136,7 @@ func ConvertCacheToProjects(cached []cache.Project) []Project {
 			Path:     p.Path,
 			LastMod:  p.LastMod.Format("2006-01-02 15:04:05"),
 			GitState: p.GitState,
+			Favorite: p.Favorite,
 		}
 	}
 	return projects
@@ -140,6 +152,7 @@ func ConvertProjectsToCache(projects []Project) []cache.Project {
 			Path:     p.Path,
 			LastMod:  lastMod,
 			GitState: p.GitState,
+			Favorite: p.Favorite,
 		}
 	}
 	return cached

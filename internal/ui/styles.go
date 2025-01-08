@@ -19,22 +19,26 @@ type Styles struct {
 	MenuItem         lipgloss.Style
 	SelectedMenuItem lipgloss.Style
 	Placeholder      lipgloss.Style
+	FavoriteIcon     lipgloss.Style
 }
 
 // NewStyles creates a new Styles instance with the given theme
 func NewStyles(activeTheme theme.Theme) *Styles {
 	return &Styles{
 		Input: lipgloss.NewStyle().
-			Foreground(activeTheme.Primary).
-			MarginTop(1),
+			BorderStyle(lipgloss.RoundedBorder()).
+			BorderForeground(activeTheme.Border).
+			BorderBottom(true).
+			Margin(1, 0).
+			Padding(0, 2),
 
 		Placeholder: lipgloss.NewStyle().
-			Foreground(activeTheme.Secondary).
-			MarginTop(1),
+			Foreground(activeTheme.DimmedText).
+			Faint(true),
 
 		Instruction: lipgloss.NewStyle().
 			Foreground(activeTheme.Primary).
-			Margin(1, 0).
+			Margin(1, 0, 0, 0).
 			Padding(1, 2).
 			Border(lipgloss.RoundedBorder()).
 			BorderForeground(activeTheme.Border),
@@ -42,13 +46,11 @@ func NewStyles(activeTheme theme.Theme) *Styles {
 		Title: lipgloss.NewStyle().
 			Bold(true).
 			Foreground(activeTheme.Primary).
-			Width(100).
 			Align(lipgloss.Center),
 
 		SelectedItem: lipgloss.NewStyle().
-			Foreground(activeTheme.Primary).
-			Margin(2, 0, 2, 0).
-			Bold(true),
+			Bold(true).
+			Foreground(activeTheme.SelectedText),
 
 		RegularItem: lipgloss.NewStyle().
 			Foreground(activeTheme.Secondary),
@@ -65,10 +67,14 @@ func NewStyles(activeTheme theme.Theme) *Styles {
 
 		ListTitle: lipgloss.NewStyle().
 			Bold(true).
-			Padding(0,2,0,2).
+			Margin(1, 0, 0, 0).
+			Padding(0, 4).
 			Foreground(activeTheme.Primary).
-			BorderStyle(lipgloss.RoundedBorder()).
-			BorderBottom(true),
+			BorderStyle(lipgloss.RoundedBorder()),
+
+		FavoriteIcon: lipgloss.NewStyle().
+			Foreground(activeTheme.Primary).
+			SetString("★ "),
 	}
 }
 
@@ -97,7 +103,9 @@ func CreateThemedDelegate(activeTheme theme.Theme) list.DefaultDelegate {
 		Foreground(activeTheme.Secondary)
 
 	delegate.Styles.SelectedDesc = descStyle.
-		Foreground(activeTheme.Text)
+		Foreground(activeTheme.Text).
+		BorderStyle(lipgloss.RoundedBorder()).
+		BorderBottom(true)
 
 	delegate.Styles.NormalDesc = descStyle
 
