@@ -13,6 +13,8 @@ import (
 	"os"
 	"runtime/debug"
 
+	"den/internal/cli/install"
+
 	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
@@ -35,7 +37,8 @@ const (
 )
 
 type CLI struct {
-	debugMode bool
+	debugMode   bool
+	installMode bool
 }
 
 func New() *CLI {
@@ -64,6 +67,7 @@ func (c *CLI) handleFlags() error {
 	case debugFlag:
 		return c.enableDebugMode()
 	case installFlag:
+		c.installMode = true
 		return c.install()
 	default:
 		fmt.Printf("Unknown flag: %s\n\n", os.Args[1])
@@ -104,8 +108,8 @@ Configuration:
     Den stores its configuration in ~/.config/den/config.yaml
     Cache is stored in ~/.cache/den/
 
-For more information, visit: https://github.com/yourusername/den
-Report bugs at: https://github.com/yourusername/den/issues
+For more information, visit: https://github.com/raidel-a/den
+Report bugs at: https://github.com/raidel-a/den/issues
 `)
 }
 
@@ -147,15 +151,61 @@ func (c *CLI) resetConfig() error {
 
 // install installs shell completions and man pages
 func (c *CLI) install() error {
-	if err := completion.InstallCompletions(); err != nil {
-		return fmt.Errorf("failed to install shell completions: %v", err)
+	// Run installation UI
+	p := tea.NewProgram(install.NewModel())
+	m, err := p.Run()
+	if err != nil {
+		return fmt.Errorf("installation UI error: %v", err)
 	}
 
-	if err := man.InstallManPage(version); err != nil {
-		return fmt.Errorf("failed to install man page: %v", err)
+	model := m.(install.Model)
+	if !model.Done() {
+		return nil // User cancelled
 	}
 
-	fmt.Println("Successfully installed shell completions and man pages.")
+	features := model.GetFeatures()
+	shells := model.GetShells()
+
+	installed := make([]string, 0)
+
+	// Install selected components
+	if features["Shell Completions"] {
+		if err := completion.InstallCompletions(shells); err != nil {
+			return fmt.Errorf("failed to install completions: %v", err)
+		}
+		// Add installed shells to summary
+		for shell, selected := range shells {
+			if selected {
+				installed = append(installed, fmt.Sprintf("✓ Shell completion for %s", shell))
+			}
+		}
+	}
+
+	if features["Man Pages"] {
+		if err := man.InstallManPage(version); err != nil {
+			return fmt.Errorf("failed to install man page: %v", err)
+		}
+		installed = append(installed, "✓ Man pages")
+	}
+
+	if features["Shell Integration"] {
+		if err := completion.InstallShellIntegration(os.Getenv("HOME"), shells); err != nil {
+			return fmt.Errorf("failed to install shell integration: %v", err)
+		}
+		// Add installed shells to summary
+		for shell, selected := range shells {
+			if selected {
+				installed = append(installed, fmt.Sprintf("✓ Shell integration for %s", shell))
+			}
+		}
+	}
+
+	// Print installation summary
+	fmt.Println("\nInstallation complete! The following components were installed:")
+	for _, item := range installed {
+		fmt.Println(item)
+	}
+
 	return nil
 }
 
