@@ -19,6 +19,7 @@ type Project struct {
 	Path     string    `json:"path"`
 	LastMod  time.Time `json:"lastMod"`
 	GitState string    `json:"gitState"`
+	Favorite bool      `json:"favorite"`
 }
 
 func GetCachePath() (string, error) {

@@ -69,7 +69,7 @@ func DetectSystemPreferences() config.UserPreferences {
 		ShowGitStatus:    true,
 		ShowHiddenFiles:  false,
 		Theme:            "default",
-		ProjectListTitle: "Your Projects",
+		ProjectListTitle: "Projects",
 	}
 
 	// Detect default editor
