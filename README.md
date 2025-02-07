@@ -10,7 +10,7 @@ Den is currently in active development with a functional core feature set.
 3. Build and install:
    ```bash
    go build
-   ./den --install   # Install shell completions and man pages
+   ./den --install   # Install shell completions, man pages, and shell integration
    ```
 
 For development:
@@ -152,3 +152,12 @@ sudo apt-get install xsel
 # or
 sudo apt-get install xclip
 ```
+
+#### Shell Integration
+Den requires shell integration for the "Change Directory" feature to work. This is automatically installed with the `--install` flag and adds the following to your shell's RC file:
+
+- Bash: `~/.bashrc`
+- Zsh: `~/.zshrc`
+- Fish: `~/.config/fish/config.fish`
+
+The integration allows Den to change your shell's working directory when using the "cd" action.
