@@ -67,10 +67,9 @@ func NewStyles(activeTheme theme.Theme) *Styles {
 
 		ListTitle: lipgloss.NewStyle().
 			Bold(true).
-			Margin(1, 0, 0, 0).
-			Padding(0, 4).
-			Foreground(activeTheme.Primary).
-			BorderStyle(lipgloss.RoundedBorder()),
+			Margin(0, 0, 0, 0).
+			Padding(0, 0).
+			Foreground(activeTheme.Primary),
 
 		FavoriteIcon: lipgloss.NewStyle().
 			Foreground(activeTheme.Primary).
@@ -91,10 +90,8 @@ func CreateThemedDelegate(activeTheme theme.Theme) list.DefaultDelegate {
 		Bold(true)
 
 	delegate.Styles.SelectedTitle = titleStyle.
-		BorderStyle(lipgloss.DoubleBorder()).
-		BorderForeground(activeTheme.Primary).
-		Foreground(activeTheme.Primary).
-		Padding(0, 1)
+		Foreground(activeTheme.Primary)
+		// Padding(0, 1)
 
 	delegate.Styles.NormalTitle = titleStyle
 
@@ -103,9 +100,7 @@ func CreateThemedDelegate(activeTheme theme.Theme) list.DefaultDelegate {
 		Foreground(activeTheme.Secondary)
 
 	delegate.Styles.SelectedDesc = descStyle.
-		Foreground(activeTheme.Text).
-		BorderStyle(lipgloss.RoundedBorder()).
-		BorderBottom(true)
+		Foreground(activeTheme.Text)
 
 	delegate.Styles.NormalDesc = descStyle
 

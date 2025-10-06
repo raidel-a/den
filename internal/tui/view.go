@@ -17,7 +17,52 @@ func (m Model) View() string {
 		return m.renderContextView()
 	}
 
-	view := m.List.View()
+	// Create gradient/shadow header that fades from solid in middle to light on edges
+	titleText := m.Config.Preferences.ProjectListTitle
+	// Use full screen width if available, otherwise use title width
+	totalWidth := len(titleText) + 6
+	if m.Width > 0 {
+		totalWidth = m.Width
+	}
+
+	// Create gradient pattern: light -> medium -> dark -> solid -> dark -> medium -> light
+	var topBar, bottomBar string
+	shades := []string{"░", "▒", "▓", "█"}
+
+	for i := 0; i < totalWidth; i++ {
+		// Calculate distance from center
+		center := totalWidth / 2
+		distFromCenter := center - i
+		if distFromCenter < 0 {
+			distFromCenter = -distFromCenter
+		}
+
+		// Map distance to shade (closer to center = darker)
+		shadeIndex := 3 - (distFromCenter * 4 / (totalWidth / 2))
+		if shadeIndex < 0 {
+			shadeIndex = 0
+		}
+		if shadeIndex > 3 {
+			shadeIndex = 3
+		}
+
+		topBar += shades[shadeIndex]
+		bottomBar += shades[shadeIndex]
+	}
+
+	// Center the title text within the full width
+	centeredTitle := lipgloss.NewStyle().
+		Width(totalWidth).
+		Align(lipgloss.Center).
+		Render(titleText)
+
+	gradientHeader := m.Styles.ListTitle.Render(
+		topBar + "\n" +
+		centeredTitle + "\n" +
+		bottomBar,
+	)
+
+	listView := m.List.View()
 
 	// Add status indicator for favorite filtering
 	if m.ShowFavoritesOnly {
@@ -28,11 +73,26 @@ func (m Model) View() string {
 			Render("Showing Favorites Only")
 
 		// Add status message at the bottom
-		view = lipgloss.JoinVertical(lipgloss.Left,
-			view,
+		listView = lipgloss.JoinVertical(lipgloss.Left,
+			listView,
 			"\n"+statusMsg,
 		)
 	}
+
+	// Center each line of the list individually
+	if m.Width > 0 {
+		lines := strings.Split(listView, "\n")
+		centeredLines := make([]string, len(lines))
+		for i, line := range lines {
+			centeredLines[i] = lipgloss.NewStyle().
+				Width(m.Width).
+				Align(lipgloss.Center).
+				Render(line)
+		}
+		listView = strings.Join(centeredLines, "\n")
+	}
+
+	view := "\n" + gradientHeader + "\n\n" + listView
 
 	return view
 }
@@ -88,12 +148,71 @@ func (m Model) renderAddingDirView() string {
 		"Enter: confirm • Tab: complete • ↑/↓: navigate • ←/→: more • Esc: cancel",
 	))
 
-	return s.String()
+	view := s.String()
+
+	// Center each line individually
+	if m.Width > 0 {
+		lines := strings.Split(view, "\n")
+		centeredLines := make([]string, len(lines))
+		for i, line := range lines {
+			centeredLines[i] = lipgloss.NewStyle().
+				Width(m.Width).
+				Align(lipgloss.Center).
+				Render(line)
+		}
+		view = strings.Join(centeredLines, "\n")
+	}
+
+	return view
 }
 
 func (m Model) renderContextView() string {
-	var s strings.Builder
-	s.WriteString(m.List.View())
+	// Create gradient/shadow header that fades from solid in middle to light on edges
+	titleText := m.Config.Preferences.ProjectListTitle
+	// Use full screen width if available, otherwise use title width
+	totalWidth := len(titleText) + 6
+	if m.Width > 0 {
+		totalWidth = m.Width
+	}
+
+	// Create gradient pattern: light -> medium -> dark -> solid -> dark -> medium -> light
+	var topBar, bottomBar string
+	shades := []string{"░", "▒", "▓", "█"}
+
+	for i := 0; i < totalWidth; i++ {
+		// Calculate distance from center
+		center := totalWidth / 2
+		distFromCenter := center - i
+		if distFromCenter < 0 {
+			distFromCenter = -distFromCenter
+		}
+
+		// Map distance to shade (closer to center = darker)
+		shadeIndex := 3 - (distFromCenter * 4 / (totalWidth / 2))
+		if shadeIndex < 0 {
+			shadeIndex = 0
+		}
+		if shadeIndex > 3 {
+			shadeIndex = 3
+		}
+
+		topBar += shades[shadeIndex]
+		bottomBar += shades[shadeIndex]
+	}
+
+	// Center the title text within the full width
+	centeredTitle := lipgloss.NewStyle().
+		Width(totalWidth).
+		Align(lipgloss.Center).
+		Render(titleText)
+
+	gradientHeader := m.Styles.ListTitle.Render(
+		topBar + "\n" +
+		centeredTitle + "\n" +
+		bottomBar,
+	)
+
+	listView := m.List.View()
 
 	// Create horizontal menu
 	var menuItems []string
@@ -119,7 +238,20 @@ func (m Model) renderContextView() string {
 	}
 
 	menu := m.Styles.Context.Render(strings.Join(menuItems, " • "))
-	s.WriteString("\n" + menu)
+	listView = listView + "\n" + menu
 
-	return s.String()
+	// Center each line of the list individually
+	if m.Width > 0 {
+		lines := strings.Split(listView, "\n")
+		centeredLines := make([]string, len(lines))
+		for i, line := range lines {
+			centeredLines[i] = lipgloss.NewStyle().
+				Width(m.Width).
+				Align(lipgloss.Center).
+				Render(line)
+		}
+		listView = strings.Join(centeredLines, "\n")
+	}
+
+	return "\n" + gradientHeader + "\n\n" + listView
 }

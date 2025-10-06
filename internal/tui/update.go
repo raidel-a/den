@@ -40,8 +40,8 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.Width = msg.Width
 		m.Height = msg.Height
 
-		// Update list dimensions
-		m.List.SetSize(msg.Width, msg.Height)
+		// Update list dimensions - subtract 7 lines for gradient header (3 lines) + spacing (2 lines) + top margin (2 lines)
+		m.List.SetSize(msg.Width, msg.Height-7)
 
 		// Update instruction width based on window size
 		m.Styles.Instruction = m.Styles.Instruction.Copy().

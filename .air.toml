@@ -3,7 +3,25 @@ tmp_dir = "tmp"
 
 [build]
 cmd = "go build -o ./tmp/main ."
-bin = "./tmp/main"
+bin = "clear && ./tmp/main"
 include_ext = ["go"]
 exclude_dir = ["tmp", "vendor"]
 watch_dir = [".", "internal"]
+delay = 100
+send_interrupt = true
+kill_delay = 500
+full_bin = true
+
+[log]
+main_only = false
+time = false
+
+[color]
+main = ""
+watcher = ""
+build = ""
+runner = ""
+app = ""
+
+[misc]
+clean_on_exit = true

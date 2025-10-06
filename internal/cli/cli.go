@@ -232,10 +232,9 @@ func (c *CLI) startUI() error {
 	// Create key bindings
 	keyMap := tui.DefaultKeyMap()
 
-	// Initialize list with empty items
+	// Initialize list with empty items (height will be set by WindowSizeMsg)
 	projectList := list.New([]list.Item{}, delegate, 0, 0)
-	projectList.SetShowTitle(true)
-	projectList.Title = cfg.Preferences.ProjectListTitle
+	projectList.SetShowTitle(false) // We'll render a custom title in the view
 	projectList.Styles.Title = styles.ListTitle
 	projectList.AdditionalFullHelpKeys = func() []key.Binding {
 		return []key.Binding{
