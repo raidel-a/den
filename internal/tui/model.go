@@ -115,7 +115,7 @@ func (i ListItem) Title() string {
 func (i ListItem) Description() string {
 	desc := i.Project.Path
 	if i.Project.GitState != "" {
-		desc += " (" + i.Project.GitState + ")"
+		desc += " ( " + i.Project.GitState + " )"
 	}
 	return desc
 }

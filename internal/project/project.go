@@ -36,7 +36,10 @@ func DetectProject(path string, config *config.Config) (*Project, error) {
 	gitState := "no git"
 	if config.Preferences.ShowGitStatus {
 		if _, err := os.Stat(filepath.Join(path, ".git")); err == nil {
-			gitState = getGitStatus(path)
+			gitState = getGitStatus(path, config)
+		} else {
+			// Format "no git" status with the configured style
+			gitState = formatGitStatus("no git", config.Preferences.GitStatusStyle)
 		}
 	}
 
@@ -114,17 +117,34 @@ func HasProjectFile(path string) bool {
 	return false
 }
 
-func getGitStatus(path string) string {
+func getGitStatus(path string, cfg *config.Config) string {
 	cmd := exec.Command("git", "-C", path, "status", "--porcelain")
 	output, err := cmd.Output()
+
+	var rawStatus string
 	if err != nil {
-		return "no git"
+		rawStatus = "no git"
+	} else if len(output) > 0 {
+		rawStatus = "git (modified)"
+	} else {
+		rawStatus = "git (clean)"
 	}
 
-	if len(output) > 0 {
-		return "git (modified)"
+	return formatGitStatus(rawStatus, cfg.Preferences.GitStatusStyle)
+}
+
+func formatGitStatus(rawStatus string, style string) string {
+	if style == "nerd" {
+		switch rawStatus {
+		case "no git":
+			return "\uf07b" // nf-fa-folder
+		case "git (clean)":
+			return "\ue0a0 \uf00c" // nf-pl-branch + nf-fa-check
+		case "git (modified)":
+			return "\ue0a0 \uf12a" // nf-pl-branch + nf-fa-exclamation
+		}
 	}
-	return "git (clean)"
+	return rawStatus
 }
 
 // ConvertCacheToProjects converts cached projects to Project structs

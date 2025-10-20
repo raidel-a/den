@@ -16,6 +16,7 @@ type UserPreferences struct {
 	DefaultFileManager string   `toml:"defaultFileManager"`
 	ShowHiddenFiles    bool     `toml:"showHiddenFiles"`
 	ShowGitStatus      bool     `toml:"showGitStatus"`
+	GitStatusStyle     string   `toml:"gitStatusStyle"`
 	Theme              string   `toml:"theme"`
 	ProjectListTitle   string   `toml:"projectListTitle"`
 }
@@ -35,6 +36,7 @@ func DefaultConfig() *Config {
 			DefaultFileManager: "", // Will be set based on OS
 			ShowHiddenFiles:    false,
 			ShowGitStatus:      true,
+			GitStatusStyle:     "text",
 			Theme:              "default",
 			ProjectListTitle:   "Projects",
 		},
@@ -66,7 +68,7 @@ func detectSystemPreferences() UserPreferences {
 	// Detect default editor based on OS
 	switch runtime.GOOS {
 	case "darwin":
-		prefs.DefaultEditor = "code" // VS Code is common on macOS
+		prefs.DefaultEditor = "code" 
 	case "linux":
 		prefs.DefaultEditor = "vim" // Vim is usually available on Linux
 	case "windows":
@@ -88,6 +90,40 @@ func detectSystemPreferences() UserPreferences {
 	}
 
 	return prefs
+}
+
+// MergeWithDefaults merges a loaded config with defaults for any missing fields.
+// Returns the merged config and a boolean indicating if any fields were migrated.
+func MergeWithDefaults(cfg *Config, defaults *Config) (*Config, bool) {
+	migrated := false
+
+	// Merge UserPreferences fields
+	if cfg.Preferences.DefaultEditor == "" {
+		cfg.Preferences.DefaultEditor = defaults.Preferences.DefaultEditor
+		migrated = true
+	}
+	if cfg.Preferences.DefaultFileManager == "" {
+		cfg.Preferences.DefaultFileManager = defaults.Preferences.DefaultFileManager
+		migrated = true
+	}
+	if cfg.Preferences.Theme == "" {
+		cfg.Preferences.Theme = defaults.Preferences.Theme
+		migrated = true
+	}
+	if cfg.Preferences.GitStatusStyle == "" {
+		cfg.Preferences.GitStatusStyle = defaults.Preferences.GitStatusStyle
+		migrated = true
+	}
+	if cfg.Preferences.ProjectListTitle == "" {
+		cfg.Preferences.ProjectListTitle = defaults.Preferences.ProjectListTitle
+		migrated = true
+	}
+	if len(cfg.Preferences.EditorList) == 0 {
+		cfg.Preferences.EditorList = defaults.Preferences.EditorList
+		migrated = true
+	}
+
+	return cfg, migrated
 }
 
 func LoadConfig() (*Config, error) {
@@ -117,25 +153,18 @@ func LoadConfig() (*Config, error) {
 
 	// Merge with defaults to ensure all fields are set
 	defaultCfg := DefaultConfig()
+	mergedCfg, didMigrate := MergeWithDefaults(&cfg, defaultCfg)
 
-	// Only override non-empty values from the loaded config
-	if cfg.Preferences.DefaultEditor == "" {
-		cfg.Preferences.DefaultEditor = defaultCfg.Preferences.DefaultEditor
-	}
-	if cfg.Preferences.DefaultFileManager == "" {
-		cfg.Preferences.DefaultFileManager = defaultCfg.Preferences.DefaultFileManager
-	}
-	if cfg.Preferences.Theme == "" {
-		cfg.Preferences.Theme = defaultCfg.Preferences.Theme
-	}
-	if cfg.Preferences.ProjectListTitle == "" {
-		cfg.Preferences.ProjectListTitle = defaultCfg.Preferences.ProjectListTitle
-	}
-	if len(cfg.Preferences.EditorList) == 0 {
-		cfg.Preferences.EditorList = defaultCfg.Preferences.EditorList
+	// If new fields were added, persist the updated config to disk
+	if didMigrate {
+		if err := SaveConfig(mergedCfg); err != nil {
+			// Don't fail loading if save fails, just continue with merged config
+			// The user will still have a valid config in memory
+			fmt.Fprintf(os.Stderr, "Warning: could not save migrated config: %v\n", err)
+		}
 	}
 
-	return &cfg, nil
+	return mergedCfg, nil
 }
 
 func SaveConfig(cfg *Config) error {
@@ -180,6 +209,10 @@ showHiddenFiles = %v
 # Whether to show Git status in repository listings
 showGitStatus = %v
 
+# Git status indicator style
+# Available options: "text" (e.g., "git (clean)", "git (modified)"), "nerd" (uses nerd font icons)
+gitStatusStyle = %q
+
 # UI theme to use
 # Available options: "default", "dark", "light"
 theme = %q
@@ -198,6 +231,7 @@ projectListTitle = %q
 		cfg.Preferences.DefaultFileManager,
 		cfg.Preferences.ShowHiddenFiles,
 		cfg.Preferences.ShowGitStatus,
+		cfg.Preferences.GitStatusStyle,
 		cfg.Preferences.Theme,
 		cfg.Preferences.ProjectListTitle,
 	)
